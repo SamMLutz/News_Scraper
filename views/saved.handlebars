@@ -12,9 +12,9 @@
             <li class="nav-item">
                 <a class="nav-link" id ="saved" href="#">Saved Articles</a>
             </li>
-            <li class="nav-item">
+            {{!-- <li class="nav-item">
                 <a class="nav-link" id="scrape" href="#">Scrape New Articles</a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a class="nav-link" id ="clear" href="#">Clear Articles</a>
             </li>
@@ -24,8 +24,8 @@
 
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">Mongo News Scraper</h1>
-    <p class="lead">New York Times Edition.</p>
+    <h1 class="display-4">Saved Articles</h1>
+    <p class="lead">Your Saved Articles.</p>
   </div>
 </div>
 
@@ -37,7 +37,8 @@
         <div class="card-body">
             <h5 class="card-title">Special title treatment</h5>
             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" id="save-article" class="btn btn-primary">Save Article</a>
+            <a href="#" id="delete-article" class="btn btn-primary">Delete From Saved</a>
+            <a href="#" id="article-notes" class="btn btn-primary">Article Notes</a>
         </div>
     </div>
 </div>
@@ -48,4 +49,3 @@
         <small>Copyright &copy;</small>
     </div>
 </footer>
-
