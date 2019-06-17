@@ -37,8 +37,8 @@
         <div class="card-body">
             <h5 class="card-title">Special title treatment</h5>
             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" id="delete-article" class="btn btn-primary">Delete From Saved</a>
-            <a href="#" id="article-notes" class="btn btn-primary">Article Notes</a>
+            <a href="#" id="delete-article" class="btn btn-primary" data-id={{this.id}}>Delete From Saved</a>
+            <a href="#" id="article-notes" class="btn btn-primary" data-id={{this.id}}>Article Notes</a>
         </div>
     </div>
       {{#each articles}}
@@ -50,7 +50,8 @@
             <h5 class="card-title">{{this.title}}</h5>
             <p class="card-text">{{this.preview}}</p>
             <p class="card-text">{{this.link}}</p>
-            <a href="#" id="save-article" class="btn btn-primary" data-id={{this.id}}>Save Article</a>
+           <a href="#" id="delete-article" class="btn btn-primary" data-id={{this.id}}>Delete From Saved</a>
+            <a href="#" id="article-notes" class="btn btn-primary" data-id={{this.id}}>Article Notes</a>
         </div>
     </div>
     {{/each}}

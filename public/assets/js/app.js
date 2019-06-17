@@ -1,13 +1,7 @@
 // // tester button click to check connection
-// $(document).on("click", ".btn", function () {
-//   alert("correctly linked yo")
-//   console.log("correctly linked yoskiiii")
-// })
-
-$(document).on("click", "#save-article", function () {
+$(document).on("click", "#delete-article", function () {
   // alert("correctly linked yo")
-  // console.log("saved button correctly linked yoskiiii")
-  // Save the id from the p tag
+  console.log("correctly linked yoskiiii")
   var thisId = $(this).attr("data-id");
   // var thisId = "5d03dd00bcf25da1f292e791"
   // console.log("this = " + JSON.stringify($(this)))
@@ -23,6 +17,36 @@ $(document).on("click", "#save-article", function () {
         
         $.ajax({
           method: "POST",
+          url: "/savedArticles/" + thisId,
+          data: {
+            // title: data.title,
+            saved: false
+          }
+        })
+        // console.log("posted")
+        location.reload();
+      });
+})
+
+$(document).on("click", "#save-article", function () {
+  // alert("correctly linked yo")
+  // console.log("saved button correctly linked yoskiiii")
+  // Save the id from the p tag
+  var thisId = $(this).attr("data-id");
+  // var thisId = "5d03dd00bcf25da1f292e791"
+  // console.log("this = " + JSON.stringify($(this)))
+  console.log("thisId = " + thisId)
+    // Now make an ajax call for the Article
+    $.ajax({
+      method: "GET",
+      url: "/savedArticles/" + thisId
+    })
+      // With that done, add the note information to the page
+      .then(function(data) {
+        console.log("data: " + JSON.stringify(data));
+        
+        $.ajax({
+          method: "POST",
           url: "/articles/" + thisId,
           data: {
             // title: data.title,
@@ -30,6 +54,7 @@ $(document).on("click", "#save-article", function () {
           }
         })
         // console.log("posted")
+        location.reload();
       });
 })
 

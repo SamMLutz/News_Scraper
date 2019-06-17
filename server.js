@@ -46,7 +46,7 @@ app.set("view engine", "handlebars");
 
 app.get("/", function (req, res) {
   // console.log("redirected here!")
-  db.Article.find({}).then(function (dbArticles) {
+  db.Article.find({saved: false}).then(function (dbArticles) {
     // console.log("dbArticles: " + dbArticles[0].preview);
     res.render("index", { articles: dbArticles });
     // location.reload();
@@ -163,6 +163,21 @@ app.get("/articles/:id", function (req, res) {
     });
 });
 
+app.get("/savedArticles/:id", function (req, res) {
+  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  db.Article.findOne({ _id: req.params.id })
+    // ..and populate all of the notes associated with it
+    //   .populate("note")
+    .then(function (dbArticle) {
+      // If we were able to successfully find an Article with the given id, send it back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
+
 // Route for saving/updating saved Article's 
 // app.post("/articles/:id", function(req, res) {
 //   // Create a new note and pass the req.body to the entry
@@ -198,6 +213,20 @@ app.post("/articles/:id", function (req, res) {
     });
 });
 
+app.post("/savedArticles/:id", function (req, res) {
+  // Create a new note and pass the req.body to the entry
+  db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
+
+
+    .then(function (dbArticle) {
+      // If we were able to successfully update an Article, send it back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
 // axios.get("https://www.nytimes.com").then(function (response) {
 
 //     // Load the HTML into cheerio and save it to a variable
