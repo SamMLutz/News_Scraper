@@ -30,7 +30,7 @@
 </div>
 
 <div id="cardholder">
-    <div class="card">
+    {{!-- <div class="card">
         <div class="card-header">
             Featured
         </div>
@@ -40,8 +40,11 @@
             <a href="#" id="delete-article" class="btn btn-primary" data-id={{this.id}}>Delete From Saved</a>
             <a href="#" id="article-notes" class="btn btn-primary" data-id={{this.id}}>Article Notes</a>
         </div>
-    </div>
+    </div> --}}
       {{#each articles}}
+      {{!-- <div id="notes">
+
+      </div> --}}
     <div class="card">
         <div class="card-header">
             Featured
@@ -54,7 +57,11 @@
             <a href="#" id="article-notes" class="btn btn-primary" data-id={{this.id}}>Article Notes</a>
         </div>
     </div>
+     <div id="notes">
+
+      </div>
     {{/each}}
+    
 </div>
 
 
