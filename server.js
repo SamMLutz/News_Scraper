@@ -32,10 +32,10 @@ mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser: true }
 
 // Handlebars
 app.engine(
-    "handlebars",
-    exphbs({
-        defaultLayout: "main"
-    })
+  "handlebars",
+  exphbs({
+    defaultLayout: "main"
+  })
 );
 app.set("view engine", "handlebars");
 
@@ -43,76 +43,160 @@ app.set("view engine", "handlebars");
 // require("./routes/apiRoutes")(app);
 // require("./routes/htmlRoutes")(app);
 
+
 app.get("/", function (req, res) {
-    res.render("index");
-})
+  // console.log("redirected here!")
+  db.Article.find({}).then(function (dbArticles) {
+    // console.log("dbArticles: " + dbArticles[0].preview);
+    res.render("index", { articles: dbArticles });
+    // location.reload();
+    // return res.redirect("/");
+  });
+});
+
+// app.get("/", function (req, res) {
+//     res.render("index");
+// })
 
 app.get("/saved", function (req, res) {
-    res.render("saved");
+   db.Article.find({ saved: true }).then(function (dbArticles) {
+    // console.log("dbArticles: " + dbArticles[0].preview);
+    res.render("saved", { articles: dbArticles });
+    // location.reload();
+    // return res.redirect("/");
+  });
 })
-
-
-
 
 // console.log("\n******************************************\n" +
 //     "Grabbing every article headline, preview and link\n" +
 //     "from the NYTimes website:" +
 //     "\n******************************************\n");
+// var result = {};
 app.get("/scrape", function (req, res) {
 
-    axios.get("https://www.nytimes.com").then(function (response) {
+  axios.get("https://www.nytimes.com").then(function (response) {
 
-        // Load the HTML into cheerio and save it to a variable
-        // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
-        var $ = cheerio.load(response.data);
+    // Load the HTML into cheerio and save it to a variable
+    // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+    var $ = cheerio.load(response.data);
 
-        // An empty array to save the data that we'll scrape
-        var result = {};
+    // An empty array to save the data that we'll scrape
+    // var result = {};
 
-        // Select each element in the HTML body from which you want information.
-        // NOTE: Cheerio selectors function similarly to jQuery's selectors,
-        // but be sure to visit the package's npm page to see how it works
-        $("article").each(function (i, element) {
-            result.title = $(this).children().text();
-            result.link = $(this).find("a").attr("href");
-            result.preview = $(this).find("p").text();
+    // Select each element in the HTML body from which you want information.
+    // NOTE: Cheerio selectors function similarly to jQuery's selectors,
+    // but be sure to visit the package's npm page to see how it works
+    $("article").each(function (i, element) {
+      var result = {};
+      result.title = $(this).children().text();
+      result.link = $(this).find("a").attr("href");
+      result.preview = $(this).find("p").text();
+      result.saved = false;
+      // var title = $(element).children().text();
+      // var link = $(element).find("a").attr("href");
+      // var preview = $(element).find("p").text();
 
-            // var title = $(element).children().text();
-            // var link = $(element).find("a").attr("href");
-            // var preview = $(element).find("p").text();
-
-            // Save these results in an object that we'll push into the results array we defined earlier
-            // Create a new Article using the `result` object built from scraping
-            db.Article.create(result)
-                .then(function (dbArticle) {
-                    // View the added result in the console
-                    console.log(dbArticle);
-                })
-                .catch(function (err) {
-                    // If an error occurred, log it
-                    console.log(err);
-                });
+      // Save these results in an object that we'll push into the results array we defined earlier
+      // Create a new Article using the `result` object built from scraping
+      db.Article.create(result)
+        .then(function (dbArticle) {
+          // View the added result in the console
+          // console.log("result: " + JSON.stringify(result))
+          // console.log("result.title = " + result.title)
+          console.log("dbArticle: " + dbArticle);
+          console.log("result: " + JSON.stringify(result));
+        })
+        .catch(function (err) {
+          // If an error occurred, log it
+          console.log(err);
         });
-
-        // Log the results once you've looped through each of the elements found with cheerio
-        res.send("Scrape Complete");
-        // console.log(results);
     });
+
+    // Log the results once you've looped through each of the elements found with cheerio
+    res.send("Scrape Complete");
+    // console.log("result: " + JSON.stringify(result));
+  });
 })
 
 // Route for getting all Articles from the db
-app.get("/articles", function(req, res) {
-    // Grab every document in the Articles collection
-    db.Article.find({})
-      .then(function(dbArticle) {
-        // If we were able to successfully find Articles, send them back to the client
-        res.json(dbArticle);
-      })
-      .catch(function(err) {
-        // If an error occurred, send it to the client
-        res.json(err);
-      });
-  });
+app.get("/articles", function (req, res) {
+  // Grab every document in the Articles collection
+  db.Article.find({})
+    .then(function (dbArticle) {
+      // If we were able to successfully find Articles, send them back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
+
+// Route for getting all Saved Articles from the db
+app.get("/savedArticles", function (req, res) {
+  // Grab every document in the Articles collection
+  db.Article.find({ saved: true })
+    .then(function (dbArticle) {
+      // If we were able to successfully find Articles, send them back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
+
+
+// Route for grabbing a specific Article by id, populate it with it's note
+app.get("/articles/:id", function (req, res) {
+  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  db.Article.findOne({ _id: req.params.id })
+    // ..and populate all of the notes associated with it
+    //   .populate("note")
+    .then(function (dbArticle) {
+      // If we were able to successfully find an Article with the given id, send it back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
+
+// Route for saving/updating saved Article's 
+// app.post("/articles/:id", function(req, res) {
+//   // Create a new note and pass the req.body to the entry
+//   db.Saved.create(req.body)
+//     .then(function(dbSaved) {
+//       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
+//       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+//       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+//       return db.Saved.findOneAndUpdate({ _id: req.params.id }, { note: dbSaved._id }, { new: true });
+//     })
+//     .then(function(dbSaved) {
+//       // If we were able to successfully update an Article, send it back to the client
+//       res.json(dbSaved);
+//     })
+//     .catch(function(err) {
+//       // If an error occurred, send it to the client
+//       res.json(err);
+//     });
+// });
+
+app.post("/articles/:id", function (req, res) {
+  // Create a new note and pass the req.body to the entry
+  db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: true })
+
+
+    .then(function (dbArticle) {
+      // If we were able to successfully update an Article, send it back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
 
 // axios.get("https://www.nytimes.com").then(function (response) {
 
@@ -147,5 +231,5 @@ app.get("/articles", function(req, res) {
 
 // Start the server
 app.listen(PORT, function () {
-    console.log("App running on port " + PORT + "!");
+  console.log("App running on port " + PORT + "!");
 });

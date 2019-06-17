@@ -41,6 +41,19 @@
             <a href="#" id="article-notes" class="btn btn-primary">Article Notes</a>
         </div>
     </div>
+      {{#each articles}}
+    <div class="card">
+        <div class="card-header">
+            Featured
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{this.title}}</h5>
+            <p class="card-text">{{this.preview}}</p>
+            <p class="card-text">{{this.link}}</p>
+            <a href="#" id="save-article" class="btn btn-primary" data-id={{this.id}}>Save Article</a>
+        </div>
+    </div>
+    {{/each}}
 </div>
 
 
