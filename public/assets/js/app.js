@@ -1,33 +1,33 @@
 
-// // // tester button click to check connection
-// $(document).on("click", "#delete-article", function () {
-//   // alert("correctly linked yo")
-//   console.log("correctly linked yoskiiii")
-//   var thisId = $(this).attr("data-id");
-//   // var thisId = "5d03dd00bcf25da1f292e791"
-//   // console.log("this = " + JSON.stringify($(this)))
-//   console.log("thisId = " + thisId)
-//     // Now make an ajax call for the Article
-//     $.ajax({
-//       method: "GET",
-//       url: "/savedArticles/" + thisId
-//     })
-//       // With that done, add the note information to the page
-//       .then(function(data) {
-//         console.log("data: " + JSON.stringify(data));
+// // tester button click to check connection
+$(document).on("click", "#delete-article", function () {
+  // alert("correctly linked yo")
+  console.log("correctly linked yoskiiii")
+  var thisId = $(this).attr("data-id");
+  // var thisId = "5d03dd00bcf25da1f292e791"
+  // console.log("this = " + JSON.stringify($(this)))
+  console.log("thisId = " + thisId)
+    // Now make an ajax call for the Article
+    $.ajax({
+      method: "GET",
+      url: "/savedArticles/" + thisId
+    })
+      // With that done, add the note information to the page
+      .then(function(data) {
+        console.log("data: " + JSON.stringify(data));
         
-//         $.ajax({
-//           method: "POST",
-//           url: "/savedArticles/" + thisId,
-//           data: {
-//             // title: data.title,
-//             saved: false
-//           }
-//         })
-//         // console.log("posted")
-//         // location.reload();
-//       });
-// })
+        $.ajax({
+          method: "POST",
+          url: "/savedArticles/" + thisId,
+          data: {
+            // title: data.title,
+            saved: false
+          }
+        })
+        // console.log("posted")
+        location.reload();
+      });
+})
 
 $(document).on("click", "#save-article", function () {
   // alert("correctly linked yo")

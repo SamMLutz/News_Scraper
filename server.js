@@ -46,7 +46,7 @@ app.set("view engine", "handlebars");
 
 app.get("/", function (req, res) {
   // console.log("redirected here!")
-  db.Article.find({saved: false}).then(function (dbArticles) {
+  db.Article.find({ saved: false }).then(function (dbArticles) {
     // console.log("dbArticles: " + dbArticles[0].preview);
     res.render("index", { articles: dbArticles });
     // location.reload();
@@ -59,7 +59,7 @@ app.get("/", function (req, res) {
 // })
 
 app.get("/saved", function (req, res) {
-   db.Article.find({ saved: true }).then(function (dbArticles) {
+  db.Article.find({ saved: true }).then(function (dbArticles) {
     // console.log("dbArticles: " + dbArticles[0].preview);
     res.render("saved", { articles: dbArticles });
     // location.reload();
@@ -151,7 +151,7 @@ app.get("/savedArticles", function (req, res) {
 app.get("/articles/:id", function (req, res) {
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
   db.Article.findOne({ _id: req.params.id })
-  .populate("note")
+    .populate("note")
     // ..and populate all of the notes associated with it
     //   .populate("note")
     .then(function (dbArticle) {
@@ -179,25 +179,7 @@ app.get("/savedArticles/:id", function (req, res) {
     });
 });
 
-app.post("/savedArticles/:id", function(req, res) {
-  // Create a new note and pass the req.body to the entry
-  console.log("req.body: " + JSON.stringify(req.body))
-  db.Note.create(req.body)
-    .then(function(dbNote) {
-      // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-      // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
-    })
-    .then(function(dbArticle) {
-      // If we were able to successfully update an Article, send it back to the client
-      res.json(dbArticle);
-    })
-    .catch(function(err) {
-      // If an error occurred, send it to the client
-      res.json(err);
-    });
-});
+
 
 app.post("/articles/:id", function (req, res) {
   // Create a new note and pass the req.body to the entry
@@ -214,25 +196,9 @@ app.post("/articles/:id", function (req, res) {
     });
 });
 
-// app.post("/savedArticles/:id", function (req, res) {
-//   // Create a new note and pass the req.body to the entry
-//   db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
-
-
-//     .then(function (dbArticle) {
-//       // If we were able to successfully update an Article, send it back to the client
-//       res.json(dbArticle);
-//     })
-//     .catch(function (err) {
-//       // If an error occurred, send it to the client
-//       res.json(err);
-//     });
-// });
-
 // app.post("/savedArticles/:id", function(req, res) {
 //   // Create a new note and pass the req.body to the entry
-//   console.log("req.body: " + JSON.stringify(req.body.saved))
-//   if (req.body.saved ) {
+//   console.log("req.body: " + JSON.stringify(req.body))
 //   db.Note.create(req.body)
 //     .then(function(dbNote) {
 //       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
@@ -248,24 +214,77 @@ app.post("/articles/:id", function (req, res) {
 //       // If an error occurred, send it to the client
 //       res.json(err);
 //     });
-//   }
-//   else if (!req.body.saved) {
-//     db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
+// });
+
+// app.post("/savedArticles/:id", function (req, res) {
+//   // Create a new note and pass the req.body to the entry
+//   db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
 
 
 //     .then(function (dbArticle) {
 //       // If we were able to successfully update an Article, send it back to the client
 //       res.json(dbArticle);
+     
 //     })
 //     .catch(function (err) {
 //       // If an error occurred, send it to the client
 //       res.json(err);
+      
 //     });
-//   }
-//   else {
-//     console.log("custom error")
-//   }
+//     // location.reload();
 // });
+
+app.post("/savedArticles/:id", function(req, res) {
+  // Create a new note and pass the req.body to the entry
+  console.log("req.body.saved: " + JSON.stringify(req.body.saved))
+  if (req.body.saved === undefined) {
+  db.Note.create(req.body)
+    .then(function(dbNote) {
+      // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
+      // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+    })
+    .then(function(dbArticle) {
+      // If we were able to successfully update an Article, send it back to the client
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+  }
+  else if (req.body.saved === "false") {
+    db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
+
+
+    .then(function (dbArticle) {
+      // If we were able to successfully update an Article, send it back to the client
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+  }
+  else {
+    // db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
+
+
+    // .then(function (dbArticle) {
+    //   // If we were able to successfully update an Article, send it back to the client
+    //   res.json(dbArticle);
+    // })
+    // .catch(function (err) {
+    //   // If an error occurred, send it to the client
+    //   res.json(err);
+    // });
+    console.log("***********************************")
+    console.log("neither if or else custom error")
+    console.log("***********************************")
+  }
+});
+
 // axios.get("https://www.nytimes.com").then(function (response) {
 
 //     // Load the HTML into cheerio and save it to a variable
