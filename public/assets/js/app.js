@@ -75,23 +75,51 @@ $(document).on("click", "#article-notes", function() {
       console.log("data.note =" + data.note)
       console.log("data: " + data);
       // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
+      $("#notes").append("Article:  <h5>" + data.title + "</h5>");
       // An input to enter a new title
-      $("#notes").append("<input id='titleinput' name='title' >");
+      $("#notes").append("<input id='titleinput' placeholder='Note Title' name='title' >");
       // A textarea to add a new note body
       $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
       // A button to submit a new note, with the id of the article saved to it
       $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+      $("#notes").append("<button data-id='" + data._id + "' id='delete-note'>Delete Note</button>");
+      // $("#notes").append("<button data-id='" + data._id + "' id='new-note'>Add a New Note</button>");
 
       // If there's a note in the article
       if (data.note) {
         // Place the title of the note in the title input
-        $("#titleinput").val(data.note.title);
+        $("#titleinput").val("Note Title: " + data.note.title);
         // Place the body of the note in the body textarea
-        $("#bodyinput").val(data.note.body);
+        $("#bodyinput").val("Article Note: " + data.note.body);
       }
     });
 });
+
+$(document).on("click", "#delete-note", function() {
+  console.log("correctly linked yoskiiii")
+  // e.preventDefault();
+  
+  $.ajax({
+    method: "GET",
+    url: "/notes"
+  }).then(function(data){
+    // console.log("data: " + data);
+    var thisId = $(this).attr("data-id");
+    console.log("data: " + JSON.stringify(data));
+        
+    $.ajax({
+      method: "DELETE",
+      url: "/notes/" + thisId,
+      // data: {
+      //   // title: data.title,
+      //   saved: true
+      // }
+    }) 
+    console.log("posted")
+    location.reload();
+  });
+  
+})
 
 // When you click the savenote button
 $(document).on("click", "#savenote", function() {
