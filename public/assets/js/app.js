@@ -170,7 +170,7 @@ $(document).on("click", "#clear", function () {
   // e.preventDefault();
   
   $.ajax({
-    method: "get",
+    method: "GET",
     url: "/articles"
   }).then(function(data){
     // console.log("data: " + data);
@@ -194,15 +194,17 @@ $(document).on("click", "#clear", function () {
 $(document).on("click", "#scrape", function () {
   // e.preventDefault();
 
-  var thisId = $(this).attr("data-id");
+  // var thisId = $(this).attr("data-id");
   $.ajax({
     method: "GET",
     url: "/scrape/"
-  }).then();
-  console.log("This ID: " + thisId);
-  $.getJSON("/articles", function(data) {
-    location.reload();
+  }).then(function(){
+    $.getJSON("/articles", function(data) {
+      location.reload();
+    });
   });
+  // console.log("This ID: " + thisId);
+ 
 })
 
 // $(document).on("click", "#saved", function () {
