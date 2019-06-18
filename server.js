@@ -285,6 +285,15 @@ app.post("/savedArticles/:id", function(req, res) {
   }
 });
 
+app.delete('/articles', function(req, res){
+  db.Article.remove({}).then(function(articles){
+    console.log("articles: " + articles)
+  }).catch(function (err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+  });
+})
+
 // axios.get("https://www.nytimes.com").then(function (response) {
 
 //     // Load the HTML into cheerio and save it to a variable

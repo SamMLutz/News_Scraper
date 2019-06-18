@@ -164,18 +164,31 @@ $(document).on("click", "#savenote", function() {
 //   console.log(data);
 // });
 
-// $(document).on("click", "#clear", function () {
-//   alert("correctly linked yo")
-//   console.log("correctly linked yoskiiii")
-//   // e.preventDefault();
+$(document).on("click", "#clear", function () {
+  alert("correctly linked yo")
+  console.log("correctly linked yoskiiii")
+  // e.preventDefault();
   
-//   $.ajax({
-//     method: "DELETE",
-//     url: "/articles"
-//   }).then();
-//   // $("#articles").empty();
-//   location.reload();
-// })
+  $.ajax({
+    method: "get",
+    url: "/articles"
+  }).then(function(data){
+    // console.log("data: " + data);
+    console.log("data: " + JSON.stringify(data));
+        
+    $.ajax({
+      method: "DELETE",
+      url: "/articles",
+      // data: {
+      //   // title: data.title,
+      //   saved: true
+      // }
+    }) 
+    console.log("posted")
+    location.reload();
+  });
+  
+})
 
 // on scrape click
 $(document).on("click", "#scrape", function () {
