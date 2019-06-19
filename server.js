@@ -116,7 +116,7 @@ app.get("/scrape", function (req, res) {
     // but be sure to visit the package's npm page to see how it works
     $("article").each(function (i, element) {
       var result = {};
-      result.title = $(this).children().text();
+      result.title = $(this).find("h2").text();
       result.link = $(this).find("a").attr("href");
       result.preview = $(this).find("p").text();
       result.saved = false;
