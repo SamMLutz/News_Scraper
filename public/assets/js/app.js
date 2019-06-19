@@ -1,32 +1,28 @@
-
-// // tester button click to check connection
+// delete article button
 $(document).on("click", "#delete-article", function () {
   // alert("correctly linked yo")
   console.log("correctly linked yoskiiii")
   var thisId = $(this).attr("data-id");
-  // var thisId = "5d03dd00bcf25da1f292e791"
   // console.log("this = " + JSON.stringify($(this)))
   console.log("thisId = " + thisId)
-    // Now make an ajax call for the Article
-    $.ajax({
-      method: "GET",
-      url: "/savedArticles/" + thisId
-    })
-      // With that done, add the note information to the page
-      .then(function(data) {
-        console.log("data: " + JSON.stringify(data));
-        
-        $.ajax({
-          method: "POST",
-          url: "/savedArticles/" + thisId,
-          data: {
-            // title: data.title,
-            saved: false
-          }
-        })
-        // console.log("posted")
-        location.reload();
-      });
+  // Now make an ajax call for the Article
+  $.ajax({
+    method: "GET",
+    url: "/savedArticles/" + thisId
+  })
+    // With that done, add the note information to the page
+    .then(function (data) {
+      console.log("data: " + JSON.stringify(data));
+      $.ajax({
+        method: "POST",
+        url: "/savedArticles/" + thisId,
+        data: {
+          saved: false
+        }
+      })
+      // console.log("posted")
+      location.reload();
+    });
 })
 
 $(document).on("click", "#save-article", function () {
@@ -34,44 +30,42 @@ $(document).on("click", "#save-article", function () {
   // console.log("saved button correctly linked yoskiiii")
   // Save the id from the p tag
   var thisId = $(this).attr("data-id");
-  // var thisId = "5d03dd00bcf25da1f292e791"
   // console.log("this = " + JSON.stringify($(this)))
   console.log("thisId = " + thisId)
-    // Now make an ajax call for the Article
-    $.ajax({
-      method: "GET",
-      url: "/articles/" + thisId
-    })
-      // With that done, add the note information to the page
-      .then(function(data) {
-        console.log("data: " + JSON.stringify(data));
-        
-        $.ajax({
-          method: "POST",
-          url: "/articles/" + thisId,
-          data: {
-            // title: data.title,
-            saved: true
-          }
-        }) 
-        console.log("posted")
-        location.reload();
-      });
-})
-
-$(document).on("click", "#article-notes", function() {
-  // Empty the notes from the note section
-  $("#notes").empty();
-  // Save the id from the p tag
-  var thisId = $(this).attr("data-id");
-
   // Now make an ajax call for the Article
   $.ajax({
     method: "GET",
     url: "/articles/" + thisId
   })
     // With that done, add the note information to the page
-    .then(function(data) {
+    .then(function (data) {
+      console.log("data: " + JSON.stringify(data));
+      $.ajax({
+        method: "POST",
+        url: "/articles/" + thisId,
+        data: {
+          // title: data.title,
+          saved: true
+        }
+      })
+      console.log("posted")
+      location.reload();
+    });
+})
+
+// article notes button
+$(document).on("click", "#article-notes", function () {
+  // Empty the notes from the note section
+  $("#notes").empty();
+  // Save the id from the p tag
+  var thisId = $(this).attr("data-id");
+  // Now make an ajax call for the Article
+  $.ajax({
+    method: "GET",
+    url: "/articles/" + thisId
+  })
+    // With that done, add the note information to the page
+    .then(function (data) {
       console.log("data.note =" + data.note)
       console.log("data: " + data);
       // The title of the article
@@ -95,14 +89,13 @@ $(document).on("click", "#article-notes", function() {
     });
 });
 
-$(document).on("click", "#delete-note", function() {
-  console.log("correctly linked yoskiiii")
+$(document).on("click", "#delete-note", function () {
+  // console.log("correctly linked yoskiiii")
   // e.preventDefault();
-  
   $.ajax({
     method: "GET",
     url: "/notes"
-  }).then(function(data){
+  }).then(function (data) {
     // console.log("data: " + data);
     // var thisId = $(this).attr("data-id");
     var thisId = data[0]._id;
@@ -112,23 +105,18 @@ $(document).on("click", "#delete-note", function() {
     console.log("data id = " + data[0]._id)
     $.ajax({
       method: "DELETE",
-      url: "/notes/" + thisId,
-      // data: {
-      //   // title: data.title,
-      //   saved: true
-      // }
-    }) 
+      url: "/notes/" + thisId
+    })
     console.log("posted")
     location.reload();
   });
-  
+
 })
 
 // When you click the savenote button
-$(document).on("click", "#savenote", function() {
+$(document).on("click", "#savenote", function () {
   // Grab the id associated with the article from the submit button
   var thisId = $(this).attr("data-id");
-
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: "POST",
@@ -141,7 +129,7 @@ $(document).on("click", "#savenote", function() {
     }
   })
     // With that done
-    .then(function(data) {
+    .then(function (data) {
       // Log the response
       console.log(data);
       // Empty the notes section
@@ -153,101 +141,37 @@ $(document).on("click", "#savenote", function() {
   $("#bodyinput").val("");
 });
 
-
-// $(document).on("click", "#save-article", function () {
-//   // alert("correctly linked yo")
-//   // console.log("saved button correctly linked yoskiiii")
-//   // Save the id from the p tag
-//   var thisId = $(this).attr("data-id");
-//   // var thisId = "5d03dd00bcf25da1f292e791"
-//   // console.log("this = " + JSON.stringify($(this)))
-//   console.log("thisId = " + thisId)
-//     // Now make an ajax call for the Article
-//     $.ajax({
-//       method: "POST",
-//       url: "/articles/" + thisId,
-//       data: {
-//         saved: true
-//       }
-//     })
-//       // With that done, add the note information to the page
-//       .then(function(data) {
-//         console.log("data: " + JSON.stringify(data));
-//         // $.ajax({
-//         //   method: "POST",
-//         //   url: "/savedArticles",
-//         //   data: data,
-//         //   dataType: 'json'
-//         // })
-//       });
-// })
-
-// Grab the articles as a json
-// $.getJSON("/articles", function (data) {
-//   // For each one
-//   for (var i = 0; i < data.length; i++) {
-//     // Display the apropos information on the page
-//     //   $("#cardholder").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-//     //   $("#cardholder").append("<p> Title: " + data[i].title + "</p>")
-//     //   $("#cardholder").append("<div class='card'> <div class='card-header'>" + data[i].title + "</div> </div>")
-//     $("#cardholder").append("<div class='card'> <div class='card-header'>" + data[i].title + "</div> <div class='card-body'> <h5 class='card-title'>" + data[i].preview + "</h5> <p class='card-text'>" + data[i].link + "</p> <a href='#' id='save-article' class='btn btn-primary'>Save Article</a> </div> </div>")
-//   }
-//   console.log(data);
-// });
-
 $(document).on("click", "#clear", function () {
   alert("correctly linked yo")
   console.log("correctly linked yoskiiii")
   // e.preventDefault();
-  
   $.ajax({
     method: "GET",
     url: "/articles"
-  }).then(function(data){
+  }).then(function (data) {
     // console.log("data: " + data);
     console.log("data: " + JSON.stringify(data));
-        
+
     $.ajax({
       method: "DELETE",
-      url: "/articles",
-      // data: {
-      //   // title: data.title,
-      //   saved: true
-      // }
-    }) 
+      url: "/articles"
+    })
     console.log("posted")
     location.reload();
   });
-  
 })
 
 // on scrape click
 $(document).on("click", "#scrape", function () {
-  // e.preventDefault();
 
-  // var thisId = $(this).attr("data-id");
   $.ajax({
     method: "GET",
     url: "/scrape/"
-  }).then(function(){
-    $.getJSON("/articles", function(data) {
+  }).then(function () {
+    $.getJSON("/articles", function (data) {
       location.reload();
     });
   });
   // console.log("This ID: " + thisId);
- 
 })
 
-// $(document).on("click", "#saved", function () {
-//   $.ajax({
-//     method: "GET",
-//     url: "/saved"
-//   }).then(function(data){
-//     console.log("data: " + data)
-//     $.getJSON("/articles", function(data) {
-//       location.reload();
-//     });
-//   });
-//   // console.log("This ID: " + thisId);
-  
-// })
