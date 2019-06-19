@@ -104,9 +104,12 @@ $(document).on("click", "#delete-note", function() {
     url: "/notes"
   }).then(function(data){
     // console.log("data: " + data);
-    var thisId = $(this).attr("data-id");
+    // var thisId = $(this).attr("data-id");
+    var thisId = data[0]._id;
     console.log("data: " + JSON.stringify(data));
-        
+    console.log("this: " + JSON.stringify($(this)))
+    console.log("thisID: " + thisId)
+    console.log("data id = " + data[0]._id)
     $.ajax({
       method: "DELETE",
       url: "/notes/" + thisId,

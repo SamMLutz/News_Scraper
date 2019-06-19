@@ -323,8 +323,8 @@ app.delete('/articles', function(req, res){
 })
 
 app.delete('/notes/:id', function(req, res){
-  db.Note.remove({_id:"5d095db652ab90f1a3d3a779"}).then(function(note){
-    $("#notes").empty()
+  db.Note.remove({_id: req.params.id }).then(function(note){
+    // $("#notes").empty()
     console.log("note: " + note)
   }).catch(function (err) {
     // If an error occurred, send it to the client
