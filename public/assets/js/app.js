@@ -142,7 +142,6 @@ $(document).on("click", "#savenote", function () {
 });
 
 $(document).on("click", "#clear", function () {
-  alert("correctly linked yo")
   console.log("correctly linked yoskiiii")
   // e.preventDefault();
   $.ajax({
